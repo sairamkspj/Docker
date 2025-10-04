@@ -11,7 +11,7 @@ COPY Frontend_Enterprise/delivery-frontend/package*.json ./
 RUN npm install
 
 # Copy the rest of Angular app
-COPY Frontend_Enterprise/delivery-frontend/ ./
+COPY Enterprise_application\Frontend_Enterprise\delivery-frontend ./
 
 # Build Angular project for production
 RUN npm run build --prod
@@ -20,7 +20,7 @@ RUN npm run build --prod
 FROM nginx:alpine
 
 # Copy custom Nginx config (optional)
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built Angular files from previous stage
 COPY --from=build /app/dist/delivery-frontend /usr/share/nginx/html
