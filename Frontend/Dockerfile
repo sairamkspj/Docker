@@ -1,32 +1,25 @@
-# Stage 1: Build Angular app
+# Stage 1: Build Angular
 FROM node:18 AS build
-
-# Set working directory inside container
 WORKDIR /app
 
-# Copy only package.json and package-lock.json for caching
-COPY Frontend_Enterprise/delivery-frontend/package*.json ./
-
-# Install dependencies
+# Copy package.json & package-lock.json
+COPY package*.json ./
 RUN npm install
 
-# Copy the rest of Angular app
-COPY Enterprise_application/Frontend_Enterprise/delivery-frontend ./
+# Copy Angular source
+COPY . ./
 
-# Build Angular project for production
+# Build Angular for production
 RUN npm run build --prod
 
-# Stage 2: Serve with Nginx
+# Stage 2: Nginx
 FROM nginx:alpine
 
-# Copy custom Nginx config (optional)
+# Copy nginx config from Dockerfile folder
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built Angular files from previous stage
+# Copy Angular build
 COPY --from=build /app/dist/delivery-frontend /usr/share/nginx/html
 
-# Expose port 80
 EXPOSE 80
-
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
