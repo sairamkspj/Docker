@@ -11,7 +11,7 @@ COPY Frontend_Enterprise/delivery-frontend/package*.json ./
 RUN npm install
 
 # Copy the rest of Angular app
-COPY Enterprise_application\Frontend_Enterprise\delivery-frontend ./
+COPY Enterprise_application/Frontend_Enterprise/delivery-frontend ./
 
 # Build Angular project for production
 RUN npm run build --prod
